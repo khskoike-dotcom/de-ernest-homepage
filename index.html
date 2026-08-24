@@ -343,6 +343,15 @@
       .flow { list-style: none; padding: 0; }
       .flow a { height: 100%; display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 20px; }
       .num { display: grid; place-items: center; width: 44px; height: 44px; color: #fff; background: var(--green); border-radius: 50%; font-weight: 900; }
+      .day-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .day-step { padding: clamp(18px,3vw,26px); background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+      .day-step strong { display: block; margin-bottom: 8px; color: var(--pink-dark); font-size: 1.06rem; }
+      .day-step h3 { color: var(--green); font-size: 1.32rem; }
+      .day-step p { margin: 0; color: var(--muted); }
+      .service-notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .service-note { padding: clamp(20px,4vw,30px); background: linear-gradient(135deg, #fffaf0, #fff5f9); border: 1px solid #f5c0d3; border-radius: 8px; }
+      .service-note h3 { color: var(--green); }
+      .service-note p { margin: 0; color: #33443e; }
       .faq-list { grid-template-columns: repeat(2, 1fr); }
       .faq-item {
         position: relative; overflow: hidden; padding: clamp(20px,4vw,30px);
@@ -428,6 +437,7 @@
       .contact-panel a[href^="tel:"] {
         display: block; width: max-content; max-width: 100%; margin-bottom: 18px;
       }
+      .mobile-call { display: none; }
       a[href^="tel:"] {
         position: relative; display: inline-flex; width: fit-content; border-radius: 8px;
         transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
@@ -523,7 +533,7 @@
       }
       @media (max-width: 820px) {
         :root { --anchor-offset: 160px; }
-        .site-header, .intro, .quick-info, .grid-2, .grid-3, .grid-4, .flow, .faq-list, .office-card, .access-card, .contact, .related-grid { grid-template-columns: 1fr; }
+        .site-header, .intro, .quick-info, .grid-2, .grid-3, .grid-4, .flow, .day-flow, .service-notes, .faq-list, .office-card, .access-card, .contact, .related-grid { grid-template-columns: 1fr; }
         .site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 10px 12px 8px; }
         .heart { width: 48px; height: 48px; flex-basis: 48px; }
         .brand { gap: 10px; }
@@ -535,6 +545,12 @@
         .nav-wrap.is-open .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
         .nav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 7px 8px; font-size: .96rem; text-align: center; }
         .nav-wrap::before, .nav-wrap::after, .nav-arrow { display: none !important; }
+        .mobile-call {
+          position: fixed; right: 80px; bottom: 12px; left: 12px; z-index: 30;
+          display: flex; align-items: center; justify-content: center; min-height: 54px;
+          color: #fff; background: linear-gradient(135deg, var(--pink), var(--coral)); border-radius: 999px;
+          box-shadow: 0 14px 30px rgba(198,80,130,.28); font-size: 1.06rem; font-weight: 900;
+        }
         .hero { min-height: 640px; align-items: start; padding-top: 160px; }
         .hero-logo {
           top: 20px; right: 20px; width: 132px; min-height: 132px; padding: 12px;
@@ -609,7 +625,9 @@
           <a href="#availability">空き状況</a>
           <a href="#photos">写真</a>
           <a href="#features">特徴</a>
+          <a href="#day">1日の流れ</a>
           <a href="#flow">流れ</a>
+          <a href="#fees">料金・送迎</a>
           <a href="#faq">よくある質問</a>
           <a href="#office">基本情報</a>
           <a href="#access">場所</a>
@@ -643,10 +661,37 @@
       <section id="access"><div class="section-head"><p class="eyebrow">事業所の場所</p><h2>Googleマップで場所を確認できます。</h2></div><div class="access-card"><div><h3>デイサービスあーねすと</h3><p class="access-address">〒047-0156<br />北海道小樽市桜1丁目23-15</p><p class="access-note">携帯で確認する場合は「Googleマップで開く」を押すと、現在地からの道順も確認しやすくなります。</p><div class="map-actions"><a class="map-button" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%87%E3%82%A4%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%82%E3%83%BC%E3%81%AD%E3%81%99%E3%81%A8%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%B0%8F%E6%A8%BD%E5%B8%82%E6%A1%9C1%E4%B8%81%E7%9B%AE23-15" target="_blank" rel="noopener">Googleマップで開く</a><a class="map-button secondary-map" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E3%83%87%E3%82%A4%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%82%E3%83%BC%E3%81%AD%E3%81%99%E3%81%A8%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%B0%8F%E6%A8%BD%E5%B8%82%E6%A1%9C1%E4%B8%81%E7%9B%AE23-15" target="_blank" rel="noopener">道順を見る</a></div></div><div class="map-frame"><iframe title="デイサービスあーねすとのGoogleマップ" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=%E3%83%87%E3%82%A4%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%82%E3%83%BC%E3%81%AD%E3%81%99%E3%81%A8%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%B0%8F%E6%A8%BD%E5%B8%82%E6%A1%9C1%E4%B8%81%E7%9B%AE23-15&amp;output=embed"></iframe></div></div></section>
       <section id="contact" class="contact"><div><p class="contact-badge">見学・相談受付中</p><p class="eyebrow">お問い合わせ</p><h2>見学や利用のご相談を受け付けています。</h2><p>デイサービスあーねすとについて、まずはお気軽にお問い合わせください。</p></div><div class="contact-panel"><span>住所</span><strong>〒047-0156<br />北海道小樽市桜1丁目23-15</strong><span>電話</span><a href="tel:0134512225">0134-51-2225</a><span>FAX</span><strong>0134-51-2226</strong></div></section>
       <section id="related" class="related"><div class="section-head"><p class="eyebrow">関連場所・運営元</p><h2>デイサービスあーねすとの関連情報</h2></div><div class="related-grid"><article class="related-card"><span>関連場所</span><h3>居宅介護支援事業所 ケアステーションはあと</h3><dl class="info-list"><div><dt>住所</dt><dd><span class="line">〒047-0021</span><span class="line">北海道小樽市入船2丁目10番13号</span><span class="line">日成ビルディング2F</span></dd></div><div><dt>営業時間</dt><dd>月・火・水・金 8:30〜17:30<br />木・土 8:30〜12:30</dd></div><div><dt>休業日</dt><dd><span class="line">日曜日・祝日</span><span class="line">年末年始（12月30日〜1月3日）</span></dd></div><div><dt>電話</dt><dd><a href="tel:0134616006">0134-61-6006</a></dd></div><div><dt>FAX</dt><dd>0134-61-6007</dd></div></dl></article><article class="related-card"><span>運営元</span><h3>Khsプロモーション株式会社</h3><img class="company-logo" src="assets/khs-heart-logo.png" alt="Khsプロモーション株式会社のロゴ" /><dl class="info-list"><div><dt>代表取締役</dt><dd>小池賢治</dd></div></dl><img class="representative-photo" src="assets/representative-koike-kenji.png" alt="代表取締役 小池賢治のプロフィール写真" /><p class="representative-message">地域の皆さまに安心して通っていただける、家庭的であたたかな場所づくりを大切にしています。</p></article></div></section>
+      <section id="day">
+        <div class="section-head"><p class="eyebrow">1日の過ごし方の一例</p><h2>その日の体調や希望に合わせて、ゆったり過ごします。</h2></div>
+        <div class="day-flow">
+          <article class="day-step"><strong>ご利用開始時</strong><h3>来所・体調確認</h3><p>表情や体調を確認し、その日の過ごし方を一緒に考えます。</p></article>
+          <article class="day-step"><strong>午前</strong><h3>会話・個別入浴</h3><p>会話を楽しみながら、希望や体調に合わせて個別入浴にも対応します。</p></article>
+          <article class="day-step"><strong>午後</strong><h3>体操・屋内レク</h3><p>手足の運動、パズル、クイズ、塗り絵などを無理のない範囲で行います。</p></article>
+          <article class="day-step"><strong>ご帰宅前</strong><h3>安心して次の時間へ</h3><p>その日の様子を大切にしながら、ご帰宅に向けた準備をします。</p></article>
+        </div>
+        <p class="availability-note">※1日の流れは一例です。利用時間や活動内容は、その方の体調・利用内容に応じて異なります。</p>
+      </section>
+      <section id="fees">
+        <div class="section-head"><p class="eyebrow">料金・送迎について</p><h2>ご利用前に、分かりやすくご案内します。</h2></div>
+        <div class="service-notes">
+          <article class="service-note"><h3>料金について</h3><p>利用内容や介護保険の負担割合によって費用は異なります。ご希望を伺ったうえで、事前に分かりやすくご案内します。</p></article>
+          <article class="service-note"><h3>送迎について</h3><p>送迎範囲はご相談ください。稲穂から朝里・朝里温泉方面までを目安としていますが、詳しくはお問い合わせください。</p></article>
+        </div>
+      </section>
+      <section id="questions">
+        <div class="section-head"><p class="eyebrow">利用前によくあるご質問</p><h2>不安なことは、見学・ご相談の際にお聞かせください。</h2></div>
+        <div class="faq-list">
+          <article class="faq-item"><h3>見学にはどのくらい時間がかかりますか？</h3><p>見学内容に合わせてご案内します。ご都合のよい時間帯を、まずはお電話でご相談ください。</p></article>
+          <article class="faq-item"><h3>利用を始める前に何を相談すればよいですか？</h3><p>利用希望の曜日、体調面で気になること、送迎などをお聞かせください。担当のケアマネジャーがいる場合もあわせてご相談いただけます。</p></article>
+          <article class="faq-item"><h3>初めての利用でも大丈夫ですか？</h3><p>はい。少人数の環境で、その方の様子やペースを大切にしながら対応します。まずは見学・利用相談からお気軽にご連絡ください。</p></article>
+          <article class="faq-item"><h3>急な予定変更があるときはどうすればよいですか？</h3><p>できるだけ早めにお電話でご連絡ください。状況を伺いながらご案内します。</p></article>
+        </div>
+      </section>
     </main>
     <footer class="site-footer"><p class="footer-brand"><span class="footer-heart"><img src="assets/khs-heart-logo.png" alt="Khsプロモーション株式会社のロゴ" /></span>デイサービスあーねすと</p><p class="footer-sub">地域密着型通所介護</p></footer>
     <div class="scroll-end-space" aria-hidden="true"></div>
     <a class="back-to-top" href="#top" aria-label="ページ上部へ戻る">↑ 上へ</a>
+    <a class="mobile-call" href="tel:0134512225" aria-label="見学・利用相談へ電話する">☎ 見学・利用相談　0134-51-2225</a>
     <script>
       const AVAILABILITY_CSV_URL = "availability.csv";
 
