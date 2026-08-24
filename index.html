@@ -759,10 +759,18 @@
           const response = await fetch(`${AVAILABILITY_CSV_URL}${AVAILABILITY_CSV_URL.includes("?") ? "&" : "?"}v=${Date.now()}`);
           if (!response.ok) throw new Error("sheet unavailable");
           const rows = parseCsv(await response.text());
-          const [headers, ...values] = rows;
+          const [metadataRow, ...dataRows] = rows;
+          const hasUpdatedDate = metadataRow?.[0] === "更新日";
+          const updatedDate = hasUpdatedDate ? metadataRow[1] : "";
+          const [headers, ...values] = hasUpdatedDate ? dataRows : rows;
           const items = values.map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] || ""])));
           renderAvailabilityRows(items.filter((item) => item["曜日"]));
-          if (update) update.textContent = "空き状況は人数編集用ファイルの内容を表示しています。";
+          if (update) {
+            const matchedDate = String(updatedDate).match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/);
+            update.textContent = matchedDate
+              ? `最終更新：${matchedDate[1]}年${Number(matchedDate[2])}月${Number(matchedDate[3])}日`
+              : "空き状況は人数編集用ファイルの内容を表示しています。";
+          }
         } catch {
           if (update) update.textContent = "空き状況は現在の登録内容を表示しています。";
         }
